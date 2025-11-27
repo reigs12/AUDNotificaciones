@@ -4,7 +4,7 @@ package com.bolsadeideas.springboot.app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -35,5 +35,8 @@ public class PrecioRestController {
 		//precioService.monitorearPrecio();
 		//return "llamo a precio asincrono";		
 	}
+	
+	@GetMapping("/ping")
+	public String ping() { return "ok"; }
 	
 }
