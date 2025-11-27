@@ -62,7 +62,7 @@ public class PrecioServiceImp implements IPrecioService {
 		      //}
 		}
 		catch (Exception e) {
-		    	  
+			System.out.println(e);		    	  
 		}
 		//return CompletableFuture.completedFuture("termina el monitoreo");
 		return "se ejecuto a las " + hora;

@@ -33,8 +33,8 @@ public class SpringBootDataJpaApplication implements CommandLineRunner  {
 	
 	public static void main(String[] args) {
 		//System.setProperty("javax.net.ssl.trustStore", "C:/Users/reinaldoguarin.guari/cacerts");
-        //System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-        //System.setProperty("javax.net.ssl.trustStore", "C:/Users/reinaldoguarin.guari/mytruststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        System.setProperty("javax.net.ssl.trustStore", "C:/Users/reinaldoguarin.guari/mytruststore.jks");
         SpringApplication.run(SpringBootDataJpaApplication.class, args);
 		
 	}
