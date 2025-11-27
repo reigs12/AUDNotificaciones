@@ -35,13 +35,13 @@ public class PrecioServiceImp implements IPrecioService {
 		      FirebaseApp.initializeApp(options);		     
 		     
 		      System.out.println("TrustStore usado: " + System.getProperty("javax.net.ssl.trustStore"));
-		      for(int x=0; x<30; x++) {	    	
+		      for(int x=0; x<60; x++) {	    	
 	            String deviceToken = "eosCvtvlSlq0HHmDdRT2Pw:APA91bEAF11MSImkIvtOUJt4NJEzhtKDVvBR49RBb9fLLACja-feJ5TuO3oV0lf0OzfiEJnJPlP_h9Z-mCXaV3BW-6pLaZqe-M5sf9U9kMoAgEdslMmUedI";
 	            System.out.println("Respuesta de la API:");
 	            valorAud=getPrecioAUD();
 	            hora = new Date();
 	            System.out.println(x + ".  "+hora +"--valor actual:" + valorAud);
-	            if(valorAud>0.653 || valorAud<0.652) {
+	            if(valorAud>0.653 || valorAud<0.6528) {
 			        Message message = Message.builder()
 			              .setToken(deviceToken)
 			              .setNotification(
