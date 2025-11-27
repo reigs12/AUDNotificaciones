@@ -35,13 +35,14 @@ public class PrecioServiceImp implements IPrecioService {
 		      FirebaseApp.initializeApp(options);		     
 		     
 		      System.out.println("TrustStore usado: " + System.getProperty("javax.net.ssl.trustStore"));
-		      for(int x=0; x<60; x++) {	    	
+		     // for(int x=0; x<60; x++) {	    	
 	            String deviceToken = "eosCvtvlSlq0HHmDdRT2Pw:APA91bEAF11MSImkIvtOUJt4NJEzhtKDVvBR49RBb9fLLACja-feJ5TuO3oV0lf0OzfiEJnJPlP_h9Z-mCXaV3BW-6pLaZqe-M5sf9U9kMoAgEdslMmUedI";
 	            System.out.println("Respuesta de la API:");
 	            valorAud=getPrecioAUD();
 	            hora = new Date();
-	            System.out.println(x + ".  "+hora +"--valor actual:" + valorAud);
-	            if(valorAud>0.653 || valorAud<0.6528) {
+	            //System.out.println(x + ".  "+hora +"--valor actual:" + valorAud);
+	            System.out.println(".  "+hora +"--valor actual:" + valorAud);
+	           // if(valorAud>0.66 || valorAud<0.6528) {
 			        Message message = Message.builder()
 			              .setToken(deviceToken)
 			              .setNotification(
@@ -55,9 +56,9 @@ public class PrecioServiceImp implements IPrecioService {
 			      String response = FirebaseMessaging.getInstance().send(message);
 			      System.out.println("Push enviado: " + response);
 			      System.out.println("Push enviado: " );
-	            }
-	            Thread.sleep(60000L);
-		      }
+	        //    }
+	           // Thread.sleep(60000L);
+		      //}
 		}
 		catch (Exception e) {
 		    	  
