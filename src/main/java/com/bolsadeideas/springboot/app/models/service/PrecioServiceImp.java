@@ -1,6 +1,5 @@
 package com.bolsadeideas.springboot.app.models.service;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,14 +8,11 @@ import java.util.concurrent.CompletableFuture;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.bolsadeideas.springboot.app.SpringSecurityConfig;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
+import com.bolsadeideas.springboot.app.models.dao.IHistoricoPrecioDao;
+import com.bolsadeideas.springboot.app.models.dto.MonitoreoPrecioDto;
+import com.bolsadeideas.springboot.app.models.entity.HistoricoPrecio;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
@@ -25,59 +21,54 @@ import com.google.firebase.messaging.Notification;
 @Service
 public class PrecioServiceImp implements IPrecioService {
 	
+	
 	/*private final FirebaseApp firebaseApp;
 	
 	@Autowired
     public PrecioServiceImp(FirebaseApp firebaseApp) {
         this.firebaseApp = firebaseApp;
     }*/
+	
+	@Autowired
+	private IHistoricoPrecioDao historicoPrecioDao;
 
 	//@Async
 	//public CompletableFuture<String> monitorearPrecio()  {
-	public String monitorearPrecio() {
-		double valorAud=0.0;
+	public MonitoreoPrecioDto monitorearPrecio() {
+		MonitoreoPrecioDto monitoreoprecio=null;
+		//double valorAud=0.0;
 		Date hora=new Date();
-		System.out.println("va a ejecutar el servcio");
-		try {
-			 //InputStream serviceAccount = new ClassPathResource("audnotificaciones.json").getInputStream();	
-		     //FirebaseOptions options = FirebaseOptions.builder()
-		     //         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-		     //         .build();
-		     // FirebaseApp.initializeApp(options);		     
-		     
-		      System.out.println("TrustStore usado: " + System.getProperty("javax.net.ssl.trustStore"));
-		      //for(int x=0; x<60; x++) {	    	
+		try {    	
 	            String deviceToken = "eosCvtvlSlq0HHmDdRT2Pw:APA91bEAF11MSImkIvtOUJt4NJEzhtKDVvBR49RBb9fLLACja-feJ5TuO3oV0lf0OzfiEJnJPlP_h9Z-mCXaV3BW-6pLaZqe-M5sf9U9kMoAgEdslMmUedI";
 	            System.out.println("Respuesta de la API:");
-	            valorAud=getPrecioAUD();
+	            monitoreoprecio=getPrecioAUD();
 	            hora = new Date();
-	            //System.out.println(x + ".  "+hora +"--valor actual:" + valorAud);
-	            System.out.println(".  "+hora +"--valor actual:" + valorAud);
-	            if(valorAud>0.654 || valorAud<0.652) {
+	            System.out.println(".  "+hora +"--valor actual:" + monitoreoprecio.getPrecioActual() + "---diferencia:"+monitoreoprecio.getDiferencia());
+	            if(monitoreoprecio.getDiferencia()>0.0001 || monitoreoprecio.getDiferencia()<-0.0001) {
 			        Message message = Message.builder()
 			              .setToken(deviceToken)
 			              .setNotification(
 			                      Notification.builder()
 			                              .setTitle("Alerta de precio AUD")
-			                              .setBody("AUD esta valiendo " + valorAud)
+			                              .setBody("AUD esta valiendo " + monitoreoprecio.getPrecioActual())
 			                              .build()
 			              )
 			              .build();
 		      
 			      String response = FirebaseMessaging.getInstance().send(message);
-			      System.out.println("Push enviado: " + response);
-			      System.out.println("Push enviado: " );
+			      //System.out.println("Push enviado: " + response);
+			      //System.out.println("Push enviado: " );
+			     // return monitoreoprecio;
 	            }
-	          //  Thread.sleep(60000L);
-		      //}
 		}
 		catch (Exception e) {
 			System.out.println(e);		    	  
 		}
 		//return CompletableFuture.completedFuture("termina el monitoreo");
-		return "se ejecuto a las " + hora;
+		return monitoreoprecio;
 	}
-	public double getPrecioAUD() {
+	public MonitoreoPrecioDto getPrecioAUD() {
+		HistoricoPrecio ultimoConsultado;
 		try {
 			String url = "https://api.twelvedata.com/quote?symbol=AUD/USD&apikey=43504d20b93e4ae9b452a00716ece3f5";
 	        URL apiUrl = new URL(url);
@@ -99,20 +90,18 @@ public class PrecioServiceImp implements IPrecioService {
             }
             reader.close();
             JSONObject json = new JSONObject(response.toString());
-            String symbol = json.optString("symbol");
-            String name = json.optString("name");
-            double price = json.optDouble("price");
-            double open = json.optDouble("open");
-            double high = json.optDouble("high");
-            double low = json.optDouble("low");
-            double close = json.optDouble("close");
-            //System.out.println("valor actual:" + close);
-            //return response.toString();
-            return close;
+            ultimoConsultado=historicoPrecioDao.findUltimoPrecio();
+            HistoricoPrecio historicoPrecio = new HistoricoPrecio(json.optString("symbol"), new Date(), json.optDouble("close"));
+            historicoPrecioDao.save(historicoPrecio);
+            //System.out.println("precio actual:" + historicoPrecio.getPrecio() + "  --Precio anterior:" + ultimoConsultado.getPrecio());
+            MonitoreoPrecioDto monitoreoprecio=new MonitoreoPrecioDto(historicoPrecio.getMoneda(), ultimoConsultado.getPrecio(),historicoPrecio.getPrecio(), ultimoConsultado.getPrecio()-historicoPrecio.getPrecio());
+            //double close = json.optDouble("close");
+            
+            return monitoreoprecio;
 		}
 		 catch (Exception e) {
 	            e.printStackTrace();
-	            return 0.0;
+	            return null;
 	    }	
 	}
 	

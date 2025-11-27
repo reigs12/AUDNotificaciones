@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.bolsadeideas.springboot.app.models.dto.MonitoreoPrecioDto;
+
 public interface IPrecioService {
 	//public CompletableFuture<String> monitorearPrecio();
-	public String monitorearPrecio();
+	public MonitoreoPrecioDto monitorearPrecio();
 
 }

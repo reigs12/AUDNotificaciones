@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bolsadeideas.springboot.app.models.dto.MonitoreoPrecioDto;
 import com.bolsadeideas.springboot.app.models.service.IPrecioService;
 
 
@@ -29,7 +30,7 @@ public class PrecioRestController {
 	private IPrecioService precioService;
 	
 	@RequestMapping(value = "/monitorearPrecio", method = RequestMethod.GET)
-	public String monitorearPrecio() {		
+	public MonitoreoPrecioDto monitorearPrecio() {		
 		return precioService.monitorearPrecio();
 		//precioService.monitorearPrecio();
 		//return "llamo a precio asincrono";		
