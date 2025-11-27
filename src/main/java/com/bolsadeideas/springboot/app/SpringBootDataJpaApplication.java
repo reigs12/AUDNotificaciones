@@ -2,6 +2,8 @@ package com.bolsadeideas.springboot.app;
 
 import java.io.InputStream;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,8 +35,8 @@ public class SpringBootDataJpaApplication implements CommandLineRunner  {
 	
 	public static void main(String[] args) {
 		//System.setProperty("javax.net.ssl.trustStore", "C:/Users/reinaldoguarin.guari/cacerts");
-        //System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-        //System.setProperty("javax.net.ssl.trustStore", "C:/Users/reinaldoguarin.guari/mytruststore.jks");
+       // System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+       // System.setProperty("javax.net.ssl.trustStore", "C:/Users/reinaldoguarin.guari/mytruststore.jks");
         SpringApplication.run(SpringBootDataJpaApplication.class, args);
 		
 	}
@@ -75,6 +77,7 @@ public class SpringBootDataJpaApplication implements CommandLineRunner  {
 		}
 		   // reader.close();*/
 	}
+	
 	public double consumoAPI()
 	{
 		try {

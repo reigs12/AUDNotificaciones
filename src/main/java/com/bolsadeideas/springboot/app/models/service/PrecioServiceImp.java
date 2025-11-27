@@ -8,10 +8,12 @@ import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.bolsadeideas.springboot.app.SpringSecurityConfig;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -22,18 +24,26 @@ import com.google.firebase.messaging.Notification;
 
 @Service
 public class PrecioServiceImp implements IPrecioService {
+	
+	/*private final FirebaseApp firebaseApp;
+	
+	@Autowired
+    public PrecioServiceImp(FirebaseApp firebaseApp) {
+        this.firebaseApp = firebaseApp;
+    }*/
 
 	//@Async
 	//public CompletableFuture<String> monitorearPrecio()  {
 	public String monitorearPrecio() {
 		double valorAud=0.0;
 		Date hora=new Date();
+		System.out.println("va a ejecutar el servcio");
 		try {
-			 InputStream serviceAccount = new ClassPathResource("audnotificaciones.json").getInputStream();	
-		     FirebaseOptions options = FirebaseOptions.builder()
-		              .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-		              .build();
-		      FirebaseApp.initializeApp(options);		     
+			 //InputStream serviceAccount = new ClassPathResource("audnotificaciones.json").getInputStream();	
+		     //FirebaseOptions options = FirebaseOptions.builder()
+		     //         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+		     //         .build();
+		     // FirebaseApp.initializeApp(options);		     
 		     
 		      System.out.println("TrustStore usado: " + System.getProperty("javax.net.ssl.trustStore"));
 		     // for(int x=0; x<60; x++) {	    	
