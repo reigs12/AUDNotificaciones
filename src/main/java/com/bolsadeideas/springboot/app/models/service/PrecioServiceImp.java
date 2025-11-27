@@ -23,10 +23,11 @@ import com.google.firebase.messaging.Notification;
 @Service
 public class PrecioServiceImp implements IPrecioService {
 
-	@Async
-	public CompletableFuture<String> monitorearPrecio()  {
+	//@Async
+	//public CompletableFuture<String> monitorearPrecio()  {
+	public String monitorearPrecio() {
 		double valorAud=0.0;
-		Date hora;
+		Date hora=new Date();
 		try {
 			 InputStream serviceAccount = new ClassPathResource("audnotificaciones.json").getInputStream();	
 		     FirebaseOptions options = FirebaseOptions.builder()
@@ -63,7 +64,8 @@ public class PrecioServiceImp implements IPrecioService {
 		catch (Exception e) {
 		    	  
 		}
-		return CompletableFuture.completedFuture("termina el monitoreo");
+		//return CompletableFuture.completedFuture("termina el monitoreo");
+		return "se ejecuto a las " + hora;
 	}
 	public double getPrecioAUD() {
 		try {

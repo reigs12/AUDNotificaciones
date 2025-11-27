@@ -30,8 +30,8 @@ public class PrecioRestController {
 	
 	@RequestMapping(value = "/monitorearPrecio", method = RequestMethod.GET)
 	public String monitorearPrecio() {		
-		precioService.monitorearPrecio();
-		return "llamo a precio asincrono";		
+		return precioService.monitorearPrecio();
+		//return "llamo a precio asincrono";		
 	}
 	
 }
