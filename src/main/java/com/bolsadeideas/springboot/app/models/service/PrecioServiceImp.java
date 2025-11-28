@@ -69,7 +69,7 @@ public class PrecioServiceImp implements IPrecioService {
               .setNotification(
                       Notification.builder()
                               .setTitle(notificacion.getTitulo())
-                              .setBody(notificacion.getMensaje() + "precio actual " + precio)
+                              .setBody(new Date() + "--" + notificacion.getMensaje() + "precio actual " + precio)
                               .build()
               )
               .build();		      
