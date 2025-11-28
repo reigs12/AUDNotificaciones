@@ -1,14 +1,26 @@
 CREATE DATABASE IF NOT EXISTS notificacionesAUD;
 USE notificacionesAUD;
 
-
-CREATE TABLE IF NOT EXISTS historicoPrecio (
+CREATE TABLE IF NOT EXISTS historicoprecio (
   id_historico_precio  int(11) NOT NULL AUTO_INCREMENT,
   moneda       VARCHAR(10) NULL,
   hora   	   TIMESTAMP NOT NULL,
-  precio   		double NOT NULL,
+  precio   	   double NOT NULL,
   PRIMARY KEY (id_historico_precio)
 ) COMMENT='Tabla para registrar el historico de precios de una moneda AUDUSD';
+
+CREATE TABLE IF NOT EXISTS notificaciones (
+  id_notificacion  int(11) NOT NULL AUTO_INCREMENT,
+  tipo             VARCHAR(10) NULL COMMENT 'P=activa la notificacion si llega a un precio determinado, D= diferencia de precio supera el valor configurado',
+  precio 		   double NOT NULL COMMENT 'si tipo es D es la diferencia entre el precio anterior y nuevo para disparar la notificacion',
+  estado      	   VARCHAR(10) NULL COMMENT 'C=configurada, pendiente de activarse, A= activa, lista para enviar la notificacion, F= finalizada, ya se disparo y ya fue atendida finaliza el proceso',
+  direccion       VARCHAR(10)  NULL COMMENT 'B=Baja, S=Sube Aplica para tipo=P, para saber si el precio se debe comparar como menor o como mayor',
+  titulo           VARCHAR(50) NULL,
+  mensaje           VARCHAR(250) NULL,
+  PRIMARY KEY (id_notificacion)
+) COMMENT='Tabla para configurar las notificaciones';
+
+INSERT INTO notificaciones (tipo,precio,estado,titulo,mensaje) VALUES ('D',0.0005,'C','volatilidad  de precio AUDUSD','El precio de AUDUSD ha superado diferencial de 0.0005 en los ultimos 2 minutos')
 
 
 CREATE TABLE IF NOT EXISTS users (
