@@ -1,16 +1,16 @@
 package com.bolsadeideas.springboot.app.models.service;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.bind.support.SessionStatus;
-
 import com.bolsadeideas.springboot.app.models.dto.MonitoreoPrecioDto;
+import com.bolsadeideas.springboot.app.models.entity.Notificacion;
+import com.google.firebase.messaging.FirebaseMessagingException;
 
 public interface IPrecioService {
 	//public CompletableFuture<String> monitorearPrecio();
 	public MonitoreoPrecioDto monitorearPrecio();
+	public String enviarNotificacion() throws FirebaseMessagingException;
+	public Notificacion actualizarNotificacion(Long id,Map<String, Object> cambios);
 
 }

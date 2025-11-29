@@ -54,7 +54,7 @@ public class SpringBootDataJpaApplication implements CommandLineRunner  {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/v0").allowedOrigins("/**").allowedMethods("*").allowedHeaders("/**");
+				//registry.addMapping("/v0").allowedOrigins("/**").allowedMethods("*").allowedHeaders("/**");
 			}
 		};
 	}

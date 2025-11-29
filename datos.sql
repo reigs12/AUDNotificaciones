@@ -326,6 +326,7 @@ CREATE TABLE IF NOT EXISTS actaordendia (
 CREATE TABLE IF NOT EXISTS planchas (
   id_planchas int(11) NOT NULL AUTO_INCREMENT,
   id_reunion int(11) NOT NULL,
+  numero_plancha int(11) DEFAULT NULL,
   id_afiliado_presidente int(11) NOT NULL,
   id_afiliado_vice_presidente int(11) NOT NULL,
   id_afiliado_tesorero int(11) NOT NULL,

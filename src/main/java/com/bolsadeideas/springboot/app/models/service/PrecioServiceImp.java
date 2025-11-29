@@ -1,15 +1,19 @@
 package com.bolsadeideas.springboot.app.models.service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import com.bolsadeideas.springboot.app.models.dao.IHistoricoPrecioDao;
 import com.bolsadeideas.springboot.app.models.dao.INotificacionDao;
@@ -30,6 +34,8 @@ public class PrecioServiceImp implements IPrecioService {
 	
 	@Autowired
 	private INotificacionDao notificacionDao;
+	
+	String deviceToken = "eosCvtvlSlq0HHmDdRT2Pw:APA91bEAF11MSImkIvtOUJt4NJEzhtKDVvBR49RBb9fLLACja-feJ5TuO3oV0lf0OzfiEJnJPlP_h9Z-mCXaV3BW-6pLaZqe-M5sf9U9kMoAgEdslMmUedI";
 	
 	public MonitoreoPrecioDto monitorearPrecio() {
 		MonitoreoPrecioDto monitoreoprecio=null;
@@ -61,21 +67,53 @@ public class PrecioServiceImp implements IPrecioService {
 		return monitoreoprecio;
 	}
 	public String activarNotificacion(Notificacion notificacion, double precio) throws FirebaseMessagingException {
-		String deviceToken = "eosCvtvlSlq0HHmDdRT2Pw:APA91bEAF11MSImkIvtOUJt4NJEzhtKDVvBR49RBb9fLLACja-feJ5TuO3oV0lf0OzfiEJnJPlP_h9Z-mCXaV3BW-6pLaZqe-M5sf9U9kMoAgEdslMmUedI";
-		//notificacion.setEstado("A");
-    	//notificacionDao.save(notificacion);
+		notificacion.setEstado("A");
+    	notificacionDao.save(notificacion);
         Message message = Message.builder()
               .setToken(deviceToken)
               .setNotification(
                       Notification.builder()
                               .setTitle(notificacion.getTitulo())
-                              .setBody(new Date() + "--" + notificacion.getMensaje() + "precio actual " + precio)
+                              .setBody(notificacion.getIdNotificacion() + ".  " + new Date() + "--" + notificacion.getMensaje())
                               .build()
               )
               .build();		      
       String response = FirebaseMessaging.getInstance().send(message);
       System.out.println("mensaje enviado:  " + response);
       return "";
+	}
+	public String enviarNotificacion() throws FirebaseMessagingException {
+		String response="";
+		List<Notificacion> notificaciones=notificacionDao.findByEstado("A");
+		for(Notificacion notificacion : notificaciones) {
+	        Message message = Message.builder()
+	              .setToken(deviceToken)
+	              .setNotification(
+	                      Notification.builder()
+	                              .setTitle(notificacion.getTitulo())
+	                              .setBody(notificacion.getIdNotificacion() +".  " + new Date() + "--" + notificacion.getMensaje())
+	                              .build()
+	              )
+	              .build();
+	      response = response + "\n" + FirebaseMessaging.getInstance().send(message);
+	      System.out.println("mensaje enviado:  " + response);
+		}
+      return response;
+	}
+	public Notificacion actualizarNotificacion(Long id, Map<String, Object> cambios) {
+		Notificacion notificacion=notificacionDao.findById(id).orElse(null);
+		if (notificacion == null) {
+	        return null;
+	    }
+		// Aplicar solo los campos enviados
+	    cambios.forEach((campo, valor) -> {
+	        Field field = ReflectionUtils.findField(Notificacion.class, campo);
+	        field.setAccessible(true);
+	        ReflectionUtils.setField(field, notificacion, valor);
+	    });
+		//notificacion.setEstado(estado);
+		notificacionDao.save(notificacion);
+		return notificacion;
 	}
 	public MonitoreoPrecioDto getPrecioAUD() {
 		HistoricoPrecio ultimoConsultado;
