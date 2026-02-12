@@ -117,6 +117,8 @@ public class PrecioServiceImp implements IPrecioService {
 	}
 	public MonitoreoPrecioDto getPrecioAUD() {
 		HistoricoPrecio ultimoConsultado;
+		System.out.println(System.getProperty("java.version"));
+		System.out.println(System.getProperty("java.home"));
 		try {
 			String url = "https://api.twelvedata.com/quote?symbol=AUD/USD&apikey=43504d20b93e4ae9b452a00716ece3f5";
 	        URL apiUrl = new URL(url);
